@@ -63,7 +63,7 @@ def refresh_token_handler(event, context):
     """
     user_id = auth.validate_user_id_auth_token(event)
 
-    auth_token = auth.encode_user_id_auth_token(user_id, org_id)
+    auth_token = auth.encode_user_id_auth_token(user_id)
 
     result = { 'auth_token': auth_token }
 

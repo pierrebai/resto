@@ -140,6 +140,35 @@ class TestLoginRestApi(unittest.TestCase):
         self.assertEqual({}, diff)
 
 
+    ############################################################################
+    #
+    # /refresh_token GET tests
+
+    def test_refresh_token_successful(self):
+        """
+        The goal of the test is to verify that the /login end-point
+        can login a user when POST and return the correct info.
+        """
+        cfg = Config()
+        self.maxDiff = 32000
+
+        in_headers = prepare_login_for_read_tests(cfg)
+
+        out_refresh_token = {
+            'auth_token': '*',
+        }
+
+        exp = Expected(
+            url = '/refresh_token',
+            method = Method.GET,
+            in_headers = in_headers,
+            out_json = out_refresh_token,
+            status_code = 200
+        )
+        diff = exp.call(cfg)
+        self.assertEqual({}, diff)
+
+
 if __name__ == '__main__':
     unittest.main()
 
