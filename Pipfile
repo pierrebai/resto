@@ -1,0 +1,11 @@
+[packages]
+bcrypt = "*"
+coverage = "*"
+flask = "*"
+marshmallow = "~=3.6"
+marshmallow-enum = "*"
+pyjwt = "*"
+requests = "*"
+click = "*"
+flask-apispec = "~=0.9"
+apispec = "~=3.3"

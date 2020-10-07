@@ -1,0 +1,4 @@
+#! /bin/sh
+base_dir=$(pwd)/$(basename $0)
+cd ${base_dir}
+pipenv run python manager.py $*
