@@ -1,9 +1,11 @@
 # Description
 
-This Python repo contains two elements of interest:
+This Python repo contains three elements of interest:
 
 - A small single-file module to help easily test REST API.
+- A small single-file module to easily add Swagger (OpenApi) documentations to Python flask routes.
 - A small single-file module to emulate the AWS Lambda API.
+
 
 ## Resto
 
@@ -30,6 +32,15 @@ Once an instance of Expected is built, you can call its call() function. It will
 
 See the various integration tests in the repo for examples of how to use resto.
 
+
+## Easy Swag
+
+The easy-swagger documentation module is called easy swag. Its source code is found in the file `src/flask-app/easy_swag.py`.
+The easy swag module is built on the flask_apispec module and the marshmallow module. It contains two functions and a decorator:
+
+- set_error_schema(): sets the marshmallow schema to be used as error report for all REST API.
+- register_with_swagger_docs(): registers all swagger/OpenApi doc that have been declared with the flask app.
+- swag(): the decorator taking input and output schemas, documentation string, tag and returned HTTP status code. It generates the proper doc.
 
 ## AWS Lambda emulator
 

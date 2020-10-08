@@ -1,11 +1,9 @@
 import json
 
 from flask import Flask
-from flask_apispec import marshal_with, use_kwargs
-from flask_apispec import doc as more_doc
-from marshmallow import Schema
 
 from aws_emulator import convert_result, get_event, get_context
+from easy_swag import swag, set_error_schema, register_with_swagger_docs
 import login
 import schemas
 
@@ -16,49 +14,9 @@ app = Flask(__name__)
 
 ############################################################################
 #
-# Registering with swagger
+# Set the error schema used in function and documented in swagger doc.
 
-_registered_functions = []
-
-
-def swag(input: Schema = None, output: Schema = None, doc: str = None, tag: str = None, success: int = 200):
-    """
-    Decorator to automatically registers the function to the swagger docs
-    and add schema for input JSON, output JSON, success code and error codes.
-    Also adds the documentation and a tag to group related end-points together.
-    """
-    def decorator(func):
-        # Input JSON, if any.
-        if input:
-            func = use_kwargs(input, apply=False)(func)
-
-        # Note: if output is None, it merely documents the success code.
-        func = marshal_with(output, code = success)(func)
-
-        # Standard error code when we return an error.
-        func = marshal_with(schemas.ExpectedError, code = '400, 403')(func)
-
-        # Optional documentation.
-        if doc:
-            func = more_doc(description=doc)(func)
-
-        # Optional tagging to group related end-points.
-        if tag:
-            func = more_doc(tags=[tag])(func)
-
-        global _registered_functions
-        _registered_functions.append(func)
-        return func
-    return decorator
-
-
-def register_with_swagger_docs(docs):
-    """
-    Do the real registration with the swagger docs.
-    Cannot be done while the function is not yet fully declared.
-    """
-    for f in _registered_functions:
-        docs.register(f)
+set_error_schema(schemas.ExpectedError, '400, 403')
 
 
 ############################################################################
