@@ -9,7 +9,7 @@ This Python repo contains two elements of interest:
 
 Resto is the REST API helper. Its source code is found in the file `src/integration-tests/resto.py`. The bulk of its funcitonality is in the `Expected` class.
 
-The class constructor takes many pparameters. They can be divided in two categories: input and output.
+The class constructor takes many parameters. They can be divided in two categories: input and output.
 
 The input parameters are:
 
@@ -33,17 +33,16 @@ See the various integration tests in the repo for examples of how to use resto.
 
 ## AWS Lambda emulator
 
-The AWS Lambda emulator bridges Python's flask with the Lambda API. It takes flask request and response and convert them into the corresponding
+The AWS Lambda emulator bridges Python's flask with the Lambda API. It takes the flask request and response and converts them into the corresponding
 Lambda event, context and result.
 
 The code is contained in the file `src/flask-app/aws_emulator.py`. It has three functions:
 
 - get_event(): creates an AWS Lambda event from the current flask request.
 - get_context(): creates a dummy AWS Lambda context.
-- convert_result(): converts a AWS Lambda result dictionary into a flask response.
+- convert_result(): converts an AWS Lambda result dictionary into a flask response.
 
-This allows writing a small flask app that emulates the AWS Lambda by calling the same implementation code. In our integration tests, we've found that this yields about 80x (yes eighty) times the speed of running AWS Lambda locally in docker. The reason for the amazing speed up is that Lambda starts and stops the docker for every request! In our application,
-using the AWS emulator cut the testing time from 15 minutes down to 10s.
+This allows writing a small flask app that emulates the AWS Lambda by calling the same implementation code. In our integration tests, we've found that this yields about 80x (yes eighty times) the speed of running AWS Lambda locally in docker. The reason for the amazing speed-up is that Lambda starts and stops the docker for *every* request! In our application, using the AWS emulator cuts the testing time from 15 minutes down to 10 seconds.
 
 
 # Setup
@@ -51,7 +50,7 @@ using the AWS emulator cut the testing time from 15 minutes down to 10s.
 You will need the following to use this code:
 
 - Python 3.7+: see [Python official site for an installer](https://www.python.org/)
-- pipenv: run `pip install pipenv` in a shell that has Python in ts command path.
+- pipenv: run `pip install pipenv` in a shell that has Python in its command path.
 - Python dependencies: run `pipenv install` in the root of the project.
 
 
@@ -59,16 +58,16 @@ You will need the following to use this code:
 
 ## Preparing to run the tests
 
-In order for the tests to work, the example flask application must be ready to answer web requests. This can be done by running the applicatin with the manager command.
+In order for the tests to work, the example flask application must be ready to answer web requests. This can be done by running the applicatin with the manager command. Use the command script (`manager.cmd` on Windows) or shell script (`manager` on Linux/MacOS):
 
 ```Running through Flask
-manager\manager flask
+manager flask
 ```
 
 You can also get code coverage analysis with this command instead:
 
 ```Running through Flask with code coverage
-manager\manager coverage flask
+manager coverage flask
 ```
 
 ## Running integration tests normally
@@ -80,7 +79,7 @@ This is required so that the integration tests always run from a reproducible st
 To run the integration tests, run the following script:
 
 ```cmd
-manager\manager integration-tests
+manager integration-tests
 ```
 
 ## Running integration tests with code coverage
@@ -92,13 +91,13 @@ The integration tests themselves don't need code coverage, but the Flask app doe
 You can run the unit-tests with this command:
 
 ```Running unit-tests
-manager\manager unit-tests
+manager unit-tests
 ```
 
 You can also get code coverage analysis with this command instead:
 
 ```Running unit-tests with code coverage
-manager\manager coverage unit-tests
+manager coverage unit-tests
 ```
 
 ## Generating the code coverage report
@@ -107,16 +106,22 @@ The following command will generate the code coverage report in HTML
 format, after you've run the tetss with code coverage:
 
 ```Generate code coverage report in HTML
-manager\manager coverage report --html
+manager coverage report --html
 ```
+
+If you run both the unit-tests and integration tests with code coverage, you will find that they reach 99% total coverage. Not bad!
 
 
 # Update Package Requirements
 
-To update the package requirements when you add a new package:
+If you modify the code and need more Python package, you can added them using pipenv or the manager. To add or update a package, use these commands:
 
 ```cmd
-manager\manager dependency update
+manager dependency add *new-package-nme*
+```
+
+```cmd
+manager dependency update
 ```
 
 
