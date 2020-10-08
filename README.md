@@ -1,3 +1,51 @@
+# Description
+
+This Python repo contains two elements of interest:
+
+- A small single-file module to help easily test REST API.
+- A small single-file module to emulate the AWS Lambda API.
+
+## Resto
+
+Resto is the REST API helper. Its source code is found in the file `src/integration-tests/resto.py`. The bulk of its funcitonality is in the `Expected` class.
+
+The class constructor takes many pparameters. They can be divided in two categories: input and output.
+
+The input parameters are:
+
+- The URL to call.
+- The HTTP method to use: GET, POST, PUT or DELETE.
+- The request parameters, as a Python dict.
+- The headers to send, as a Python dict.
+- The JSON body to send, as a Python dict.
+
+The output parameters are:
+
+- The headers expected to be received, as a Python dict.
+- The JSON body expected to be received, as a Python dict.
+- The request status code expected to be received.
+- If the output JSON should be strictly compared.
+
+Once an instance of Expected is built, you can call its call() function. It will send the request and compare the expected results with the actual results and return the difference. It tries to be smart when matching JSON and headers.
+
+See the various integration tests in the repo for examples of how to use resto.
+
+
+## AWS Lambda emulator
+
+The AWS Lambda emulator bridges Python's flask with the Lambda API. It takes flask request and response and convert them into the corresponding
+Lambda event, context and result.
+
+The code is contained in the file `src/flask-app/aws_emulator.py`. It has three functions:
+
+- get_event(): creates an AWS Lambda event from the current flask request.
+- get_context(): creates a dummy AWS Lambda context.
+- convert_result(): converts a AWS Lambda result dictionary into a flask response.
+
+This allows writing a small flask app that emulates the AWS Lambda by calling the same implementation code. In our integration tests, we've found that this yields about 80x (yes eighty) times the speed of running AWS Lambda locally in docker. The reason for the amazing speed up is that Lambda starts and stops the docker for every request! In our application,
+using the AWS emulator cut the testing time from 15 minutes down to 10s.
+
+
 # Setup
 
 You will need the following to use this code:
@@ -5,6 +53,7 @@ You will need the following to use this code:
 - Python 3.7+: see [Python official site for an installer](https://www.python.org/)
 - pipenv: run `pip install pipenv` in a shell that has Python in ts command path.
 - Python dependencies: run `pipenv install` in the root of the project.
+
 
 # Running Tests
 
@@ -60,6 +109,7 @@ format, after you've run the tetss with code coverage:
 ```Generate code coverage report in HTML
 manager\manager coverage report --html
 ```
+
 
 # Update Package Requirements
 
