@@ -128,36 +128,8 @@ def after_request(response):
 #
 # Swagger
 
-from apispec import APISpec
-from apispec.ext.marshmallow import MarshmallowPlugin
-from flask_apispec.extension import FlaskApiSpec
 
-
-def enum_to_properties(self, field, **kwargs):
-    """
-    Add an OpenAPI extension for marshmallow_enum.EnumField instances
-    """
-    import marshmallow_enum
-    if isinstance(field, marshmallow_enum.EnumField):
-        return {'type': 'string', 'enum': [m.name for m in field.enum]}
-    return {}
-
-
-marshmallow_plugin = MarshmallowPlugin()
-
-app.config.update({
-    'APISPEC_SPEC': APISpec(
-        title='example-web-app',
-        version='v1',
-        plugins=[marshmallow_plugin],
-        openapi_version='2.0'
-    ),
-    'APISPEC_SWAGGER_URL': '/swagger/',
-})
-
-marshmallow_plugin.converter.add_attribute_function(enum_to_properties)
-docs = FlaskApiSpec(app)
-register_with_swagger_docs(docs)
+register_with_swagger_docs(app, title = 'web-example-app')
 
 
 ############################################################################
